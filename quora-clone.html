@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quora clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f1f2f2;
+            color: #333;
+            padding-top: 60px;
+        }
+
+        .navbar {
+            background-color: #fff;
+            border-bottom: 1px solid #e2e2e2;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-container {
+            width: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+        }
+
+        .logo {
+            color: #b92b27;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nav-icons a {
+            color: #636466;
+            font-size: 20px;
+            margin: 0 15px;
+            text-decoration: none;
+            padding: 12px 5px;
+        }
+
+        .nav-icons a.active, .nav-icons a:hover {
+            color: #b92b27;
+            border-bottom: 3px solid #b92b27;
+        }
+
+        .search-bar {
+            background-color: #f7f7f8;
+            border: 1px solid #e2e2e2;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            width: 300px;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            margin-left: 8px;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .btn-ask {
+            background-color: #b92b27;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-ask:hover {
+            background-color: #93221f;
+        }
+
+        .main-container {
+            width: 1000px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1.2fr;
+            gap: 24px;
+            padding: 0 15px;
+        }
+
+        .sidebar-left, .sidebar-right {
+            position: sticky;
+            top: 70px;
+            height: fit-content;
+        }
+
+        .sidebar-item {
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #636466;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #e6e6e6;
+            color: #333;
+        }
+
+        .sidebar-item i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .create-post, .post-card, .widget {
+            background-color: #fff;
+            border: 1px solid #e2e2e2;
+            border-radius: 4px;
+            padding: 16px;
+        }
+
+        .post-input-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background-color: #7a7a7a;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .create-post input {
+            width: 100%;
+            padding: 10px;
+            background-color: #f7f7f8;
+            border: 1px solid #e2e2e2;
+            border-radius: 20px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .post-actions-row {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #f1f2f2;
+            padding-top: 8px;
+        }
+
+        .post-actions-row button {
+            background: none;
+            border: none;
+            color: #636466;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: #636466;
+        }
+
+        .post-question {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .post-question:hover {
+            text-decoration: underline;
+        }
+
+        .post-body p {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #282829;
+        }
+
+        .post-footer {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 12px;
+            border-top: 1px solid #f1f2f2;
+            padding-top: 10px;
+        }
+
+        .upvote-section {
+            display: flex;
+            background-color: #f7f7f8;
+            border-radius: 20px;
+            border: 1px solid #e2e2e2;
+            overflow: hidden;
+        }
+
+        .btn-upvote, .btn-downvote {
+            background: none;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            color: #636466;
+            font-size: 13px;
+        }
+
+        .btn-upvote {
+            border-right: 1px solid #e2e2e2;
+        }
+
+        .btn-upvote:hover, .btn-downvote:hover {
+            background-color: #edebeb;
+        }
+
+        .btn-upvote.active {
+            color: #b92b27;
+            font-weight: bold;
+        }
+
+        .footer-icon-btn {
+            background: none;
+            border: none;
+            color: #636466;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .widget h4 {
+            font-size: 15px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #f1f2f2;
+            padding-bottom: 5px;
+        }
+
+        .widget ul {
+            list-style: none;
+        }
+
+        .widget li {
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #636466;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">Quora</h1>
+            <nav class="nav-icons">
+                <a href="#" class="active"><i class="fas fa-home"></i></a>
+                <a href="#"><i class="fas fa-list-alt"></i></a>
+                <a href="#"><i class="fas fa-edit"></i></a>
+                <a href="#"><i class="fas fa-users"></i></a>
+                <a href="#"><i class="fas fa-bell"></i></a>
+            </nav>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search Quora">
+            </div>
+            <button class="btn-ask">Add Question</button>
+        </div>
+    </header>
+
+    <main class="main-container">
+        
+        <aside class="sidebar-left">
+            <div class="sidebar-item active"><i class="fas fa-plus"></i> Create Space</div>
+            <div class="sidebar-item"><i class="fas fa-brain"></i> Psychology</div>
+            <div class="sidebar-item"><i class="fas fa-laptop-code"></i> Technology</div>
+            <div class="sidebar-item"><i class="fas fa-book"></i> Education</div>
+            <div class="sidebar-item"><i class="fas fa-music"></i> Music</div>
+        </aside>
+
+        <section class="feed" id="feed-section">
+            
+            <div class="create-post">
+                <div class="post-input-row">
+                    <div class="user-avatar">U</div>
+                    <input type="text" id="postInput" placeholder="What do you want to ask or share?">
+                </div>
+                <div class="post-actions-row">
+                    <button><i class="fas fa-question-circle"></i> Ask</button>
+                    <button><i class="fas fa-edit"></i> Answer</button>
+                    <button id="createPostBtn"><i class="fas fa-pen"></i> Post</button>
+                </div>
+            </div>
+
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="user-avatar">AI</div>
+                    <div class="user-info">
+                        <h4>Jane Doe</h4>
+                        <p>Software Engineer · Updated 2h ago</p>
+                    </div>
+                </div>
+                <div class="post-body">
+                    <h3 class="post-question">What is the best way to learn Web Development in 2026?</h3>
+                    <p class="post-answer">
+                        The best way to learn web development today is by building projects. Start with semantic HTML, modern CSS (Flexbox and Grid), and deep dive into JavaScript. Don't rush into frameworks like React or Vue until your vanilla JavaScript concepts are rock solid...
+                    </p>
+                </div>
+                <div class="post-footer">
+                    <div class="upvote-section">
+                        <button class="btn-upvote"><i class="fas fa-arrow-up"></i> Upvote · 1.2k</button>
+                        <button class="btn-downvote"><i class="fas fa-arrow-down"></i></button>
+                    </div>
+                    <button class="footer-icon-btn"><i class="fas fa-comment"></i> 45</button>
+                    <button class="footer-icon-btn"><i class="fas fa-share"></i> 12</button>
+                </div>
+            </div>
+
+        </section>
+
+        <aside class="sidebar-right">
+            <div class="widget">
+                <h4>Improve Your Feed</h4>
+                <ul>
+                    <li><input type="checkbox" checked> Visit your feed</li>
+                    <li><input type="checkbox"> Follow 5 Spaces</li>
+                    <li><input type="checkbox"> Upvote 3 posts</li>
+                    <li><input type="checkbox"> Ask a question</li>
+                </ul>
+            </div>
+        </aside>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const postBtn = document.getElementById('createPostBtn');
+            const postInput = document.getElementById('postInput');
+            const feedSection = document.getElementById('feed-section');
+
+            postBtn.addEventListener('click', () => {
+                const text = postInput.value.trim();
+
+                if (text === "") {
+                    alert("Please write something first!");
+                    return;
+                }
+
+                const newPost = document.createElement('div');
+                newPost.className = 'post-card';
+                newPost.innerHTML = `
+                    <div class="post-header">
+                        <div class="user-avatar">U</div>
+                        <div class="user-info">
+                            <h4>User</h4>
+                            <p>Just now</p>
+                        </div>
+                    </div>
+                    <div class="post-body">
+                        <h3 class="post-question">New Post</h3>
+                        <p class="post-answer">${text}</p>
+                    </div>
+                    <div class="post-footer">
+                        <div class="upvote-section">
+                            <button class="btn-upvote"><i class="fas fa-arrow-up"></i> Upvote · 0</button>
+                            <button class="btn-downvote"><i class="fas fa-arrow-down"></i></button>
+                        </div>
+                        <button class="footer-icon-btn"><i class="fas fa-comment"></i> 0</button>
+                        <button class="footer-icon-btn"><i class="fas fa-share"></i> 0</button>
+                    </div>
+                `;
+
+                feedSection.insertBefore(newPost, feedSection.children[1]);
+                postInput.value = "";
+            });
+
+            feedSection.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-upvote')) {
+                    const btn = e.target.closest('.btn-upvote');
+                    btn.classList.toggle('active');
+                    
+                    const icon = btn.querySelector('i');
+                    if (btn.classList.contains('active')) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
